@@ -61,9 +61,9 @@ public class Main {
     *
     * Return: List of searched slang words
     * */
-    public static HashMap<String, Boolean> searchSlangWord (String keyword, HashMap<String, HashMap<String, Boolean>> dictionary)
+    public static HashMap<String, Boolean> searchSlangWordByKeyWord (String keyword)
     {
-        HashMap<String, Boolean> slangWords =  dictionary.get(keyword);
+        HashMap<String, Boolean> slangWords =  keywordDictionary.get(keyword);
         return slangWords;
     }
 
@@ -192,6 +192,43 @@ public class Main {
     }
 
 
+    public static Boolean deleteSlangWord (String slangWord) {
+        HashMap<String, Boolean> slang = new HashMap<String, Boolean>();
+        String definition = dictionary.get(slangWord);
+        if (definition == null) return false;
+
+        dictionary.remove(slangWord);
+
+        // Remove in keyword dictionary
+        String keyWord = "";
+        for (int i = 0; i < slangWord.length(); i++)
+        {
+            keyWord += slangWord.charAt(i);
+            if (keywordDictionary.get(keyWord) != null) {
+                slang = keywordDictionary.get(keyWord);
+                slang.remove(slangWord);
+            }
+        }
+
+        // Delete in definition dictionary
+
+        for (int i = 0 ; i < definition.length(); i ++)
+        {
+            for (int j = i; j < definition.length(); j ++)
+            {
+                keyWord = "";
+                for (int k = i ; k <= j ; k ++)
+                    keyWord += definition.charAt(k);
+
+                if (definitionDictionary.get(keyWord) != null)
+                {
+                    slang = definitionDictionary.get(keyWord);
+                    slang.remove(slangWord);
+                }
+            }
+        }
+        return true;
+    }
     public static void  main(String[] args) throws IOException {
         loadDataByDefinition();
         loadDataByKeyWord();
@@ -201,8 +238,10 @@ public class Main {
         System.out.print("Enter any key");
         Scanner scanner = new Scanner(System.in);
         String line = scanner.nextLine();
-        if (addSlangWord("W","Wabe")) System.out.println("Added words");
-        else System.out.println("Cannot add word");
+        if (deleteSlangWord("V")) System.out.println("Delete words");
+        else System.out.println("Cannot delete word");
 
+        HashMap<String, Boolean> slangWords = searchSlangWordByKeyWord("V");
+        System.out.println(slangWords);
     }
 }
