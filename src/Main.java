@@ -13,16 +13,18 @@ import java.util.Scanner;
 // 2. Tao menu console tam thoi
 // 3. Lam cac chuc nang
 public class Main {
+    static private HashMap<String, String> dictionary = new HashMap<String, String>();
+    static private HashMap<String, HashMap<String, Boolean>> keywordDictionary = new HashMap<String, HashMap<String, Boolean>>();
+    static private HashMap<String, HashMap<String, Boolean>> definitionDictionary= new HashMap<String, HashMap<String, Boolean>>();
     /*
     * THIS FUNCTION RETURN HASHMAP CONTAIN <KEYWORD , HASHMAP<SLANGWORD, BOOLEAN>>
     * KEYWORD IS THE KEYWORD USER INPUT
     * SLANGWORD CONTAINS KEYWORDS
     *
     * */
-    public static HashMap<String, HashMap<String, Boolean>> loadData () throws IOException
+    public static void loadDataByKeyWord () throws IOException
     {
-// Read data from slang.txt file
-        HashMap<String, HashMap<String, Boolean>> keywordSlangWordDictionary = new HashMap<String, HashMap<String, Boolean>>();
+// Read data from slang.txt fil
         HashMap<String, Boolean> slangWord;
         BufferedReader br = new BufferedReader(new FileReader("slang.txt"));
         String line = ""; // SKIP 1ST LINE: SLANG`MEANING
@@ -36,13 +38,13 @@ public class Main {
                 String keyword = "";
                 for (int i = 0 ; i < parts[0].length(); i ++) {
                     keyword = keyword + parts[0].charAt(i);
-                    if (keywordSlangWordDictionary.get(keyword) == null) {
+                    if (keywordDictionary.get(keyword) == null) {
                         slangWord = new HashMap<String, Boolean>();
                         slangWord.put(parts[0], true);
-                        keywordSlangWordDictionary.put(keyword,slangWord);
+                        keywordDictionary.put(keyword,slangWord);
                     }
                     else {
-                        slangWord = keywordSlangWordDictionary.get(keyword);
+                        slangWord = keywordDictionary.get(keyword);
                         slangWord.put(parts[0], true);
                     }
                 }
@@ -51,8 +53,6 @@ public class Main {
             line = br.readLine();
 
         }
-
-        return keywordSlangWordDictionary;
     }
 
     /*
@@ -67,12 +67,14 @@ public class Main {
         return slangWords;
     }
 
-    /**
-     * THIS FUNCTION DOES NOT WORK
+    /*
+     * THIS FUNCTION RETURN HASHMAP CONTAIN <KEYWORD , HASHMAP<SLANGWORD, BOOLEAN>>
+     * KEYWORD IS THE KEYWORD USER INPUT
+     * SLANGWORD 'S DEFINITION CONTAINS THE KEYWORDS
      * */
-    public static HashMap<String, HashMap<String, Boolean>> loadDataByDefinition () throws IOException
+    public static void loadDataByDefinition () throws IOException
     {
-        HashMap<String, HashMap<String, Boolean>> keywordSlangWordDictionary = new HashMap<String, HashMap<String, Boolean>>();
+
         HashMap<String, Boolean> slangWord;
         BufferedReader br = new BufferedReader(new FileReader("slang.txt"));
         String line = br.readLine(); // SKIP 1ST LINE: SLANG`MEANING
@@ -92,13 +94,13 @@ public class Main {
                         {
                             keyword = keyword + parts[1].charAt(k);
                         }
-                        if (keywordSlangWordDictionary.get(keyword) == null) {
+                        if (definitionDictionary.get(keyword) == null) {
                             slangWord = new HashMap<String, Boolean>();
                             slangWord.put(parts[0], true);
-                            keywordSlangWordDictionary.put(keyword,slangWord);
+                            definitionDictionary.put(keyword,slangWord);
                         }
                         else {
-                            slangWord = keywordSlangWordDictionary.get(keyword);
+                            slangWord = definitionDictionary.get(keyword);
                             slangWord.put(parts[0], true);
                         }
                     }
@@ -109,37 +111,98 @@ public class Main {
 
         }
 
-        return keywordSlangWordDictionary;
     }
 
-    private static void generateKeyWords (String definition)
+    public static void loadData() throws IOException
     {
-        String keyword = "";
-        for (int i = 0 ; i < definition.length(); i++)
-        {
+        HashMap<String, String> dictionary = new HashMap<String, String>();
+        BufferedReader br = new BufferedReader(new FileReader("slang.txt"));
+        String line = br.readLine(); // SKIP 1ST LINE: SLANG`MEANING
+        line = br.readLine();
 
-            for (int j = i ; j < definition.length(); j ++)
+        while (line != null)
+        {
+            String[] parts = line.split("`");
+            if (parts.length == 2)
             {
-                keyword = "";
-                for (int k = i ; k <= j ; k++)
-                    keyword += definition.charAt(k);
-                System.out.println(keyword);
+                dictionary.put(parts[0], parts[1]);
             }
+            line = br.readLine();
 
         }
+    }
 
+    /*
+    * Params: slangWord, definition, HashMap<String, String> dictionary
+    * Return true/false
+    * Desc: add a slang word to dictionary
+    * */
+    public static Boolean addSlangWord (String slangWord, String definition){
+        // CHECK DIEU KIEN ADD VO
+        if (dictionary.get(slangWord)==null) {
+            HashMap<String, Boolean> slang;
+            dictionary.put(slangWord, definition);
+
+            // ADD TO KEYWORD HASHMAP
+            String keyWord = "";
+            for (int i = 0; i < slangWord.length(); i++)
+            {
+                keyWord += slangWord.charAt(i);
+
+                if (keywordDictionary.get(keyWord) == null)
+                {
+                    slang = new HashMap<String, Boolean>();
+                    slang.put(slangWord,true);
+                    keywordDictionary.put(keyWord,slang);
+                }
+                else {
+                    slang = keywordDictionary.get(keyWord);
+                    slang.put(slangWord,true);
+                }
+            }
+
+            // ADD TO DEFINITION HASHMAP,
+            for (int i = 0; i < definition.length();i++)
+            {
+                for (int j = 0 ; j <definition.length(); j ++)
+                {
+                    keyWord = "";
+                    for (int k = i ; k <= j ; k ++)
+                        keyWord += definition.charAt(k);
+
+                    if (definitionDictionary.get(keyWord)== null)
+                    {
+                        slang = new HashMap<String, Boolean>();
+                        slang.put(slangWord, true);
+                        definitionDictionary.put(keyWord,slang);
+                    }
+                    else
+                    {
+                        slang = definitionDictionary.get(keyWord);
+                        slang.put(slangWord, true);
+                    }
+                }
+            }
+        }
+        else
+            return false;
+
+        return true;
 
     }
+
+
     public static void  main(String[] args) throws IOException {
-        HashMap<String, HashMap<String, Boolean>> dictionary = loadDataByDefinition();
-        HashMap<String, HashMap<String, Boolean>> anotherDictionary = loadData();
+        loadDataByDefinition();
+        loadDataByKeyWord();
+        loadData();
 
+
+        System.out.print("Enter any key");
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter keyword: ");
-        String keyword = scanner.nextLine();
-
-        HashMap<String, Boolean> slangWords = dictionary.get(keyword);
-        System.out.println(slangWords);
+        String line = scanner.nextLine();
+        if (addSlangWord("W","Wabe")) System.out.println("Added words");
+        else System.out.println("Cannot add word");
 
     }
 }
