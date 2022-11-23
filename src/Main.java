@@ -1,7 +1,6 @@
 import javax.swing.plaf.synth.SynthTextAreaUI;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 /*
@@ -53,18 +52,6 @@ public class Main {
             line = br.readLine();
 
         }
-    }
-
-    /*
-    * Params: String keyword: User input
-    * HashMap<String, HashMap<String, Boolean>> dictionary: Load from slang.txt include
-    *
-    * Return: List of searched slang words
-    * */
-    public static HashMap<String, Boolean> searchSlangWordByKeyWord (String keyword)
-    {
-        HashMap<String, Boolean> slangWords =  keywordDictionary.get(keyword);
-        return slangWords;
     }
 
     /*
@@ -131,6 +118,27 @@ public class Main {
         }
     }
 
+    /*
+     * Params: String keyword: User input
+     * HashMap<String, HashMap<String, Boolean>> dictionary: Load from slang.txt include
+     *
+     * Return: List of searched slang words
+     * */
+    public static HashMap<String, Boolean> searchSlangWordByKeyWord (String keyword)
+    {
+        HashMap<String, Boolean> slangWords =  keywordDictionary.get(keyword);
+        return slangWords;
+    }
+
+    /*
+     * Search slangword by definition
+     * */
+    public static HashMap<String, Boolean> searchSlangWordByDefinition(String keyword)
+    {
+        HashMap<String, Boolean> slangWords = definitionDictionary.get(keyword);
+
+        return slangWords;
+    }
     /*
     * Params: slangWord, definition, HashMap<String, String> dictionary
     * Return true/false
@@ -232,18 +240,54 @@ public class Main {
         System.out.println("Deleted words");
         return true;
     }
+
+
+    /*
+    * Show history of searched slang words
+    * Return ArrayList<String> slang words
+    * */
+
+    public static ArrayList<String> showHistory () throws IOException
+    {
+        ArrayList<String> slangWords = new ArrayList<String>();
+        BufferedReader br = new BufferedReader(new FileReader("history.txt"));
+        String line = br.readLine();
+        while(line != null)
+        {
+            slangWords.add(line);
+            line = br.readLine();
+        }
+        return slangWords;
+    }
+
+    /*
+    * Write searched slang word to file history.txt
+    * Params: String slangword
+    * Return: Boolean
+    * */
+    public static Boolean saveHistory(String slangWord) throws IOException
+    {
+        BufferedWriter bw = new BufferedWriter(new FileWriter("history", true));
+        bw.write(slangWord);
+        bw.newLine();
+        bw.close();
+
+        return true;
+    }
     public static void  main(String[] args) throws IOException {
         loadDataByDefinition();
         loadDataByKeyWord();
         loadData();
 
 
-        System.out.print("Enter any key");
+        System.out.print("Enter any key: ");
         Scanner scanner = new Scanner(System.in);
-        String line = scanner.nextLine();
-        String definition = dictionary.get("V");
-        if (deleteSlangWord("V")) System.out.println("Delete words");
-        else System.out.println("Cannot delete");
+        String slangWord = scanner.nextLine();
+
+        saveHistory(slangWord);
+        System.out.print("Enter a slang word: ");
+        slangWord = scanner.nextLine();
+        saveHistory(slangWord);
 
     }
 }
