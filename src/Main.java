@@ -198,7 +198,11 @@ public class Main {
 
     }
 
-
+    /*
+    * Desc: delete a slang word
+    * Params: String slangWord
+    * Return: Boolean
+    * */
     public static Boolean deleteSlangWord (String slangWord) {
         HashMap<String, Boolean> slang = new HashMap<String, Boolean>();
         String definition = dictionary.get(slangWord);
@@ -241,9 +245,19 @@ public class Main {
         return true;
     }
 
+    public static Boolean editSlangWord(String oldSlangWord, String oldDefinition, String newSlangWord, String newDefinition)
+    {
+        if (oldSlangWord.equals(newSlangWord) && oldDefinition.equals(newDefinition)) return true;
+        // Delete the old slang word, definition
+        // Add new
+        if (deleteSlangWord(oldSlangWord)==false) return false;
+        if (addSlangWord(newSlangWord,newDefinition)==false) return false;
+        return true;
+    }
 
     /*
-    * Show history of searched slang words
+    * Desc: Show history of searched slang words
+    * Params: String Filename
     * Return ArrayList<String> slang words
     * */
 
@@ -280,11 +294,18 @@ public class Main {
         loadData();
 
 
-        System.out.print("Enter any key: ");
+        System.out.print("Enter keyword: ");
         Scanner scanner = new Scanner(System.in);
         String slangWord = scanner.nextLine();
 
-        ArrayList<String> slangWords = showHistory("history.txt");
-        System.out.println(slangWords);
+        System.out.print("Enter definition: ");
+        String definition = scanner.nextLine();
+
+        if (editSlangWord("V", "Very",slangWord,definition)== true) System.out.print("Successfully edit");
+        else System.out.println("Dit not edit yet");
+
+
+        System.out.print(searchSlangWordByDefinition("Wave"));
+
     }
 }
