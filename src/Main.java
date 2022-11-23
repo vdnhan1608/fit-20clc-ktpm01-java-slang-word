@@ -2,6 +2,7 @@ import javax.swing.plaf.synth.SynthTextAreaUI;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 import java.util.Scanner;
 /*
 * Author
@@ -318,6 +319,18 @@ public class Main {
         return true;
 
     }
+
+    public static HashMap<String, String> randomSlangWord ()
+    {
+        HashMap<String, String> slangWord = new HashMap<String, String>();
+        String[] slangWords = dictionary.keySet().toArray(new String[0]);
+        Random rand = new Random();
+        int upperBound = 7000;
+        int int_random = rand.nextInt(upperBound);
+        slangWord.put(slangWords[int_random],dictionary.get(slangWords[int_random]));
+        return slangWord;
+
+    }
     public static void  main(String[] args) throws IOException {
         loadDataByDefinition();
         loadDataByKeyWord();
@@ -332,7 +345,7 @@ public class Main {
         System.out.print("Enter definition: ");
         String definition = scanner.nextLine();
 
-        resetSlangWord();
-
+        HashMap<String, String> a = randomSlangWord();
+        System.out.print(a);
     }
 }
