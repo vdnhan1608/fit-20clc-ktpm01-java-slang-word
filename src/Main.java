@@ -12,9 +12,19 @@ import java.util.Scanner;
 // 2. Tao menu console tam thoi
 // 3. Lam cac chuc nang
 public class Main {
+    /*
+    * Desc: 3 of these hashmap will change during user interaction
+    * */
     static private HashMap<String, String> dictionary = new HashMap<String, String>();
     static private HashMap<String, HashMap<String, Boolean>> keywordDictionary = new HashMap<String, HashMap<String, Boolean>>();
     static private HashMap<String, HashMap<String, Boolean>> definitionDictionary= new HashMap<String, HashMap<String, Boolean>>();
+
+    /*
+    * These 3 hashmap will be the origin to reset
+    * */
+    static private HashMap<String, String> originDictionary;
+    static private HashMap<String, HashMap<String, Boolean>> originKeyWordDictionary;
+    static private HashMap<String, HashMap<String, Boolean>> originDefinitionDictionary;
     /*
     * THIS FUNCTION RETURN HASHMAP CONTAIN <KEYWORD , HASHMAP<SLANGWORD, BOOLEAN>>
     * KEYWORD IS THE KEYWORD USER INPUT
@@ -52,6 +62,7 @@ public class Main {
             line = br.readLine();
 
         }
+        originKeyWordDictionary = keywordDictionary;
     }
 
     /*
@@ -98,6 +109,8 @@ public class Main {
 
         }
 
+        originDefinitionDictionary = definitionDictionary;
+
     }
 
     public static void loadData() throws IOException
@@ -116,6 +129,8 @@ public class Main {
             line = br.readLine();
 
         }
+
+        originDictionary = dictionary;
     }
 
     /*
@@ -288,10 +303,26 @@ public class Main {
 
         return true;
     }
+
+    /*
+    * Desc: Assign dictionary, keyWordDictionary, definitionDictionary to the origin
+    * Params:
+    * Return: Boolean
+    * */
+    public static Boolean resetSlangWord ()
+    {
+        dictionary = new HashMap<String, String>(originDictionary) ;
+        keywordDictionary = new HashMap<String, HashMap<String,Boolean>>(originKeyWordDictionary);
+        definitionDictionary = new HashMap<String, HashMap<String, Boolean>>(originDefinitionDictionary);
+
+        return true;
+
+    }
     public static void  main(String[] args) throws IOException {
         loadDataByDefinition();
         loadDataByKeyWord();
         loadData();
+
 
 
         System.out.print("Enter keyword: ");
@@ -301,11 +332,7 @@ public class Main {
         System.out.print("Enter definition: ");
         String definition = scanner.nextLine();
 
-        if (editSlangWord("V", "Very",slangWord,definition)== true) System.out.print("Successfully edit");
-        else System.out.println("Dit not edit yet");
-
-
-        System.out.print(searchSlangWordByDefinition("Wave"));
+        resetSlangWord();
 
     }
 }
