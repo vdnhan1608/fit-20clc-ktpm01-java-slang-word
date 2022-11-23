@@ -115,7 +115,6 @@ public class Main {
 
     public static void loadData() throws IOException
     {
-        HashMap<String, String> dictionary = new HashMap<String, String>();
         BufferedReader br = new BufferedReader(new FileReader("slang.txt"));
         String line = br.readLine(); // SKIP 1ST LINE: SLANG`MEANING
         line = br.readLine();
@@ -195,7 +194,9 @@ public class Main {
     public static Boolean deleteSlangWord (String slangWord) {
         HashMap<String, Boolean> slang = new HashMap<String, Boolean>();
         String definition = dictionary.get(slangWord);
-        if (definition == null) return false;
+        if (definition == null) {
+            System.out.println("Cannot delelte");
+            return false;}
 
         dictionary.remove(slangWord);
 
@@ -227,6 +228,8 @@ public class Main {
                 }
             }
         }
+
+        System.out.println("Deleted words");
         return true;
     }
     public static void  main(String[] args) throws IOException {
@@ -238,10 +241,9 @@ public class Main {
         System.out.print("Enter any key");
         Scanner scanner = new Scanner(System.in);
         String line = scanner.nextLine();
+        String definition = dictionary.get("V");
         if (deleteSlangWord("V")) System.out.println("Delete words");
-        else System.out.println("Cannot delete word");
+        else System.out.println("Cannot delete");
 
-        HashMap<String, Boolean> slangWords = searchSlangWordByKeyWord("V");
-        System.out.println(slangWords);
     }
 }
