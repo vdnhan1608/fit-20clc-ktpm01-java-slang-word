@@ -247,10 +247,10 @@ public class Main {
     * Return ArrayList<String> slang words
     * */
 
-    public static ArrayList<String> showHistory () throws IOException
+    public static ArrayList<String> showHistory (String fileName) throws IOException
     {
         ArrayList<String> slangWords = new ArrayList<String>();
-        BufferedReader br = new BufferedReader(new FileReader("history.txt"));
+        BufferedReader br = new BufferedReader(new FileReader(fileName));
         String line = br.readLine();
         while(line != null)
         {
@@ -265,9 +265,9 @@ public class Main {
     * Params: String slangword
     * Return: Boolean
     * */
-    public static Boolean saveHistory(String slangWord) throws IOException
+    public static Boolean saveHistory(String slangWord, String fileName) throws IOException
     {
-        BufferedWriter bw = new BufferedWriter(new FileWriter("history", true));
+        BufferedWriter bw = new BufferedWriter(new FileWriter(fileName, true));
         bw.write(slangWord);
         bw.newLine();
         bw.close();
@@ -284,10 +284,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         String slangWord = scanner.nextLine();
 
-        saveHistory(slangWord);
-        System.out.print("Enter a slang word: ");
-        slangWord = scanner.nextLine();
-        saveHistory(slangWord);
-
+        ArrayList<String> slangWords = showHistory("history.txt");
+        System.out.println(slangWords);
     }
 }
