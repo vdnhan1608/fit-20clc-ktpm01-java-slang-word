@@ -46,7 +46,7 @@ public class Main  {
     public static void searchByKeywordScreen()
     {
         searchByKeywordScreen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        searchByKeywordScreen.setSize(200, 300);
+        searchByKeywordScreen.setSize(200, 200);
 
         Container contentPane = searchByKeywordScreen.getContentPane();
         contentPane.setLayout(new BorderLayout());
@@ -61,11 +61,9 @@ public class Main  {
         pane1.add(textField);
 
         JPanel pane2 = new JPanel();
-        JTextArea textArea = new JTextArea(50,50);
-//        JScrollPane scrollPane = new JScrollPane(textArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-//        pane2.add(scrollPane);
-        // scrollPane.setViewport(textArea);
-        pane2.add(textArea);
+        JTextArea textArea = new JTextArea(20,50);
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        pane2.add(scrollPane);
 
         contentPane.add(pane1,BorderLayout.PAGE_START);
         contentPane.add(pane2, BorderLayout.PAGE_END);
@@ -74,8 +72,10 @@ public class Main  {
         * Xu ly su kien
         * */
         textField.addActionListener(new ActionListener() {
+
             @Override
             public void actionPerformed(ActionEvent e) {
+                textArea.setText("");
                 String keyword = textField.getText();
 
                 String[] slangWords = SlangWord.searchSlangWordByKeyWord(keyword).keySet().toArray(new String[0]);
