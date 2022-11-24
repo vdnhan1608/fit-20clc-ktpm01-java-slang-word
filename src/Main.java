@@ -19,7 +19,7 @@ import SlangWord.SlangWord;
 * Làm giao diện
 * */
 
-public class Main  {
+public class Main {
 
     public static JButton searchBtnByKeyWord = new JButton("Search by keyword");
     public static JButton searchBtnByDefinition = new JButton("Search by definition");
@@ -34,11 +34,56 @@ public class Main  {
 
     public static SlangWord SlangWord = new SlangWord();
     /*
-    * These JFrame are all screen of application
-    * */
+     * These JFrame are all screen of application
+     * */
     public static JFrame mainScreen = new JFrame("Slang word");
 
     public static JFrame searchByKeywordScreen = new JFrame("Search by keyword");
+
+    public static JFrame searchByDefinitionScreen = new JFrame("Search by definition");
+
+    /*
+     * Desc: Screen search by definition
+     * */
+    public static void searchByDefinitionScreen()
+    {
+        searchByDefinitionScreen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        searchByDefinitionScreen.setSize(200,200);
+        Container pane = searchByDefinitionScreen.getContentPane();
+        pane.setLayout(new BorderLayout());
+
+        JPanel pane1 = new JPanel();
+        pane1.setLayout(new FlowLayout());
+        JLabel label = new JLabel("Search");
+        JTextField textField = new JTextField(10);
+        pane1.add(label);
+        pane1.add (textField);
+
+        JPanel pane2 = new JPanel();
+        JTextArea textArea = new JTextArea(20,50);
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        pane2.add(scrollPane);
+
+        pane.add(pane1, BorderLayout.PAGE_START);
+        pane.add(pane2, BorderLayout.PAGE_END);
+        searchByDefinitionScreen.pack();
+
+        /*
+        * Event handle
+        * */
+        textField.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                textArea.setText("");
+                String keyword = textField.getText();
+                String[] slangWords = SlangWord.searchSlangWordByDefinition(keyword).keySet().toArray(new String[0]);
+
+                for (int i = 0 ; i < slangWords.length ; i ++) textArea.append(slangWords[i]  +"\n");
+            }
+        });
+
+    }
+
 
     /*
     * Desc: Create search by keyword screen
@@ -146,8 +191,9 @@ public class Main  {
         //mainScreen();
         searchByKeywordScreen();
         setUpListener();
+        searchByDefinitionScreen();
 
-        searchByKeywordScreen.setVisible(true);
+        searchByDefinitionScreen.setVisible(true);
 
 
 
