@@ -42,6 +42,8 @@ public class Main {
 
     public static JFrame searchByDefinitionScreen = new JFrame("Search by definition");
 
+    public static JFrame addSlangWordScreen = new JFrame("Add new slang words");
+
     /*
      * Desc: Screen search by definition
      * */
@@ -132,6 +134,60 @@ public class Main {
         searchByKeywordScreen.pack();
     }
 
+
+    /*
+    * Desc: Add a new slang word screen
+    * */
+    public static void addSlangWordScreen()
+    {
+        addSlangWordScreen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        addSlangWordScreen.setPreferredSize(new Dimension(300, 200));
+        Container pane = addSlangWordScreen.getContentPane();
+        pane.setLayout(new BorderLayout());
+        // Test search by definition xem co ra tu moi them vao khong
+        JPanel pane1 = new JPanel();
+        pane1.setLayout(new FlowLayout());
+        JLabel label1 = new JLabel("Slang Word");
+        JTextField textField1 = new JTextField(15);
+        pane1.add(label1);
+        pane1.add(textField1);
+
+        JPanel pane2 = new JPanel();
+        pane2.setLayout(new FlowLayout());
+        JLabel label2 = new JLabel("Definition");
+        JTextField textField2 = new JTextField(15);
+        pane2.add(label2);
+        pane2.add(textField2);
+
+
+        JPanel pane3 = new JPanel();
+        pane3.setLayout(new FlowLayout());
+        JButton addBtn = new JButton("Add");
+        pane3.add(addBtn);
+
+        pane.add(pane1, BorderLayout.PAGE_START);
+        pane.add(pane2, BorderLayout.CENTER);
+        pane.add(pane3,BorderLayout.PAGE_END);
+
+        addSlangWordScreen.pack();
+
+        /*
+        * Event handle
+        * */
+
+        addBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String slangWord = textField1.getText();
+                String definition = textField2.getText();
+
+                Boolean check = SlangWord.addSlangWord(slangWord,definition);
+                if (check) System.out.println("Added");
+                else System.out.println("Duplicate");
+            }
+        });
+    }
+
     /*
     * Desc: Create main screen
     * */
@@ -191,9 +247,9 @@ public class Main {
         //mainScreen();
         searchByKeywordScreen();
         setUpListener();
-        searchByDefinitionScreen();
+        addSlangWordScreen();
 
-        searchByDefinitionScreen.setVisible(true);
+        addSlangWordScreen.setVisible(true);
 
 
 
