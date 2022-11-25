@@ -54,6 +54,10 @@ public class Main {
     public static JFrame resetSlangWordScreen = new JFrame("Reset slang words");
 
     public static JFrame randomSlangWord = new JFrame("Random slang word");
+
+    public static JFrame guessDefiniton = new JFrame("Guess definiton");
+
+    public static JFrame guessSlangWord = new JFrame("Guess slang word");
     /*
      * Desc: Screen search by definition
      * */
@@ -485,6 +489,128 @@ public class Main {
         pane.add(pane3);
         randomSlangWord.pack();
     }
+
+    /*
+    * Desc: Game guess the definition of a slang word
+    * */
+    public static void guessDefiniton()
+    {
+        guessDefiniton.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        guessDefiniton.setPreferredSize(new Dimension(500, 300));
+        Container pane = guessDefiniton.getContentPane();
+        pane.setLayout(new BoxLayout(pane, BoxLayout.PAGE_AXIS));
+
+        JPanel pane1 = new JPanel();
+        pane1.setLayout(new FlowLayout());
+        JLabel questionLabel = new JLabel("Guess the definition ");
+        JTextField slangWordTextField = new JTextField(15);
+        slangWordTextField.setHorizontalAlignment(JTextField.CENTER);
+        slangWordTextField.setEditable(false);
+        pane1.add(questionLabel, BorderLayout.NORTH);
+        pane1.add(slangWordTextField, BorderLayout.SOUTH);
+
+        JPanel pane2 = new JPanel();
+        pane2.setLayout(new GridLayout(2,2));
+        JTextField answer1 = new JTextField(20);
+        answer1.setHorizontalAlignment(JTextField.CENTER);
+        JTextField answer2 = new JTextField(20);
+        answer2.setHorizontalAlignment(JTextField.CENTER);
+        pane2.add(answer1);
+        pane2.add(answer2);
+
+        JPanel pane3 = new JPanel();
+        pane3.setLayout(new FlowLayout());
+        JTextField answer3 = new JTextField(20);
+        answer3.setHorizontalAlignment(JTextField.CENTER);
+        JTextField answer4 = new JTextField(20);
+        answer4.setHorizontalAlignment(JTextField.CENTER);
+        pane2.add(answer3);
+        pane2.add(answer4);
+
+
+        JPanel pane4 = new JPanel();
+        pane4.setLayout(new FlowLayout());
+        JLabel statusLabel = new JLabel("Status");
+        JTextField statusTextField = new JTextField(20);
+        statusTextField.setHorizontalAlignment(JTextField.CENTER);
+        statusTextField.setEditable(false);
+        pane4.add(statusLabel);
+        pane4.add(statusTextField);
+
+        JPanel pane5 = new JPanel();
+        pane5.setLayout(new FlowLayout());
+        JButton playAgainBtn = new JButton("Play Again");
+        JButton returnBtn = new JButton("Return");
+        pane5.add(playAgainBtn);
+        pane5.add(returnBtn);
+
+        pane.add(pane1);
+        pane.add(pane2);
+        pane.add(pane4);
+        pane.add(pane5);
+        guessDefiniton.pack();
+    }
+
+    /*
+    * Desc: Game guess the slang word
+    * */
+    public static void guessSlangWord()
+    {
+        guessSlangWord.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        guessSlangWord.setPreferredSize(new Dimension(500, 300));
+        Container pane = guessSlangWord.getContentPane();
+        pane.setLayout(new BoxLayout(pane, BoxLayout.PAGE_AXIS));
+
+        JPanel pane1 = new JPanel();
+        pane1.setLayout(new FlowLayout());
+        JLabel questionLabel = new JLabel("Guess the slang word ?");
+        JTextField slangWordTextField = new JTextField(15);
+        slangWordTextField.setHorizontalAlignment(JTextField.CENTER);
+        slangWordTextField.setEditable(false);
+        pane1.add(questionLabel, BorderLayout.NORTH);
+        pane1.add(slangWordTextField, BorderLayout.SOUTH);
+
+        JPanel pane2 = new JPanel();
+        pane2.setLayout(new GridLayout(2,2));
+        JTextField answer1 = new JTextField(20);
+        answer1.setHorizontalAlignment(JTextField.CENTER);
+        JTextField answer2 = new JTextField(20);
+        answer2.setHorizontalAlignment(JTextField.CENTER);
+        pane2.add(answer1);
+        pane2.add(answer2);
+
+        JPanel pane3 = new JPanel();
+        pane3.setLayout(new FlowLayout());
+        JTextField answer3 = new JTextField(20);
+        answer3.setHorizontalAlignment(JTextField.CENTER);
+        JTextField answer4 = new JTextField(20);
+        answer4.setHorizontalAlignment(JTextField.CENTER);
+        pane2.add(answer3);
+        pane2.add(answer4);
+
+
+        JPanel pane4 = new JPanel();
+        pane4.setLayout(new FlowLayout());
+        JLabel statusLabel = new JLabel("Status");
+        JTextField statusTextField = new JTextField(20);
+        statusTextField.setHorizontalAlignment(JTextField.CENTER);
+        statusTextField.setEditable(false);
+        pane4.add(statusLabel);
+        pane4.add(statusTextField);
+
+        JPanel pane5 = new JPanel();
+        pane5.setLayout(new FlowLayout());
+        JButton playAgainBtn = new JButton("Play Again");
+        JButton returnBtn = new JButton("Return");
+        pane5.add(playAgainBtn);
+        pane5.add(returnBtn);
+
+        pane.add(pane1);
+        pane.add(pane2);
+        pane.add(pane4);
+        pane.add(pane5);
+        guessSlangWord.pack();
+    }
     /*
     * Desc: Create main screen
     * */
@@ -542,6 +668,7 @@ public class Main {
         SlangWord.loadData();
 
         mainScreen();
+        addSlangWordScreen();
         searchByKeywordScreen();
         searchByDefinitionScreen();
         setUpListener();
@@ -549,8 +676,10 @@ public class Main {
         deleteSlangWordScreen();
         resetSlangWordScreen();
         randomSlangWord();
+        guessDefiniton();
+        guessSlangWord();
 
-        randomSlangWord.setVisible(true);
+        guessSlangWord.setVisible(true);
 
 //        System.out.println(SlangWord.searchDefinition("HOLS"));
 
