@@ -495,6 +495,30 @@ public class Main {
     * */
     public static void guessDefiniton()
     {
+        /*
+        * Handle to get random slang word
+        * Generate 4 random slang word, pick one randomly for question
+        * */
+        ArrayList<String> slangWords = new ArrayList<String>();
+        ArrayList<String> definitions = new ArrayList<String>();
+        HashMap<String, String> slangWord ;
+        for (int i = 0 ; i < 4 ;i ++)
+        {
+            slangWord = SlangWord.randomSlangWord();
+            String word = slangWord.keySet().toString().substring(1,slangWord.keySet().toString().length()-1);
+            slangWords.add(word);
+            definitions.add(SlangWord.searchDefinition(word));
+        }
+
+
+
+        Random rand = new Random();
+        int upper_bound = 4;
+        int randomIndex = rand.nextInt(upper_bound);
+
+
+
+        /**/
         guessDefiniton.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         guessDefiniton.setPreferredSize(new Dimension(500, 300));
         Container pane = guessDefiniton.getContentPane();
@@ -506,26 +530,23 @@ public class Main {
         JTextField slangWordTextField = new JTextField(15);
         slangWordTextField.setHorizontalAlignment(JTextField.CENTER);
         slangWordTextField.setEditable(false);
+        slangWordTextField.setText(slangWords.get(randomIndex));
         pane1.add(questionLabel, BorderLayout.NORTH);
         pane1.add(slangWordTextField, BorderLayout.SOUTH);
 
         JPanel pane2 = new JPanel();
         pane2.setLayout(new GridLayout(2,2));
-        JTextField answer1 = new JTextField(20);
-        answer1.setHorizontalAlignment(JTextField.CENTER);
-        JTextField answer2 = new JTextField(20);
-        answer2.setHorizontalAlignment(JTextField.CENTER);
-        pane2.add(answer1);
-        pane2.add(answer2);
+        JTextField[] answers = new JTextField[4];
 
-        JPanel pane3 = new JPanel();
-        pane3.setLayout(new FlowLayout());
-        JTextField answer3 = new JTextField(20);
-        answer3.setHorizontalAlignment(JTextField.CENTER);
-        JTextField answer4 = new JTextField(20);
-        answer4.setHorizontalAlignment(JTextField.CENTER);
-        pane2.add(answer3);
-        pane2.add(answer4);
+
+        for (int i = 0 ; i < 4; i++)
+        {
+            answers[i] = new JTextField(20);
+            answers[i].setHorizontalAlignment(JTextField.CENTER);
+            answers[i].setText(definitions.get(i));
+            answers[i].setEditable(false);
+            pane2.add(answers[i]);
+        }
 
 
         JPanel pane4 = new JPanel();
@@ -549,6 +570,22 @@ public class Main {
         pane.add(pane4);
         pane.add(pane5);
         guessDefiniton.pack();
+
+        /*
+        * Handle event
+        * */
+        for (int i = 0 ; i < 4; i++)
+        {
+            final int index = i;
+            answers[i].addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    super.mouseClicked(e);
+                    if (index == randomIndex) statusTextField.setText("Correct");
+                    else statusTextField.setText("False");
+                }
+            });
+        }
     }
 
     /*
@@ -556,6 +593,31 @@ public class Main {
     * */
     public static void guessSlangWord()
     {
+        /*
+         * Handle to get random slang word
+         * Generate 4 random slang word, pick one randomly for question
+         * */
+        ArrayList<String> slangWords = new ArrayList<String>();
+        ArrayList<String> definitions = new ArrayList<String>();
+        HashMap<String, String> slangWord ;
+        for (int i = 0 ; i < 4 ;i ++)
+        {
+            slangWord = SlangWord.randomSlangWord();
+            String word = slangWord.keySet().toString().substring(1,slangWord.keySet().toString().length()-1);
+            slangWords.add(word);
+            definitions.add(SlangWord.searchDefinition(word));
+        }
+
+
+
+        Random rand = new Random();
+        int upper_bound = 4;
+        int randomIndex = rand.nextInt(upper_bound);
+
+        System.out.println(randomIndex);
+
+
+        /**/
         guessSlangWord.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         guessSlangWord.setPreferredSize(new Dimension(500, 300));
         Container pane = guessSlangWord.getContentPane();
@@ -567,26 +629,23 @@ public class Main {
         JTextField slangWordTextField = new JTextField(15);
         slangWordTextField.setHorizontalAlignment(JTextField.CENTER);
         slangWordTextField.setEditable(false);
+        slangWordTextField.setText(definitions.get(randomIndex));
         pane1.add(questionLabel, BorderLayout.NORTH);
         pane1.add(slangWordTextField, BorderLayout.SOUTH);
 
         JPanel pane2 = new JPanel();
         pane2.setLayout(new GridLayout(2,2));
-        JTextField answer1 = new JTextField(20);
-        answer1.setHorizontalAlignment(JTextField.CENTER);
-        JTextField answer2 = new JTextField(20);
-        answer2.setHorizontalAlignment(JTextField.CENTER);
-        pane2.add(answer1);
-        pane2.add(answer2);
 
-        JPanel pane3 = new JPanel();
-        pane3.setLayout(new FlowLayout());
-        JTextField answer3 = new JTextField(20);
-        answer3.setHorizontalAlignment(JTextField.CENTER);
-        JTextField answer4 = new JTextField(20);
-        answer4.setHorizontalAlignment(JTextField.CENTER);
-        pane2.add(answer3);
-        pane2.add(answer4);
+        JTextField[] answers = new JTextField[4];
+        for (int i = 0 ; i < 4; i ++)
+        {
+            answers[i] = new JTextField(20);
+            answers[i].setHorizontalAlignment(JTextField.CENTER);
+            answers[i].setEditable(false);
+            answers[i].setText(slangWords.get(i));
+            pane2.add(answers[i]);
+        }
+
 
 
         JPanel pane4 = new JPanel();
@@ -610,7 +669,26 @@ public class Main {
         pane.add(pane4);
         pane.add(pane5);
         guessSlangWord.pack();
+
+        /*
+        * Handle event
+        * */
+        for (int i = 0 ; i < 4; i ++)
+        {
+            final int index = i;
+            answers[i].addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    super.mouseClicked(e);
+                    if (index == randomIndex){
+                        statusTextField.setText("Correct");
+                    }
+                    else statusTextField.setText("False");
+                }
+            });
+        }
     }
+
     /*
     * Desc: Create main screen
     * */
@@ -679,7 +757,7 @@ public class Main {
         guessDefiniton();
         guessSlangWord();
 
-        guessSlangWord.setVisible(true);
+        guessDefiniton.setVisible(true);
 
 //        System.out.println(SlangWord.searchDefinition("HOLS"));
 
