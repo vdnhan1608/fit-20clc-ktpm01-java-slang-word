@@ -280,17 +280,13 @@ public class Main {
         pane1.setLayout(new FlowLayout());
         JLabel oldSlangWordLabel = new JLabel("Slang Word");
         JTextField oldSlangWordTextField = new JTextField(15);
-        JLabel oldDefinitionLabel = new JLabel("Definition");
-        JTextField oldDefinitionTextField = new JTextField(15);
         pane1.add(oldSlangWordLabel);
         pane1.add(oldSlangWordTextField);
-        pane1.add(oldDefinitionLabel);
-        pane1.add(oldDefinitionTextField);
 
 
         JPanel pane2 = new JPanel();
         pane2.setLayout(new FlowLayout());
-        JLabel newSlangWordLabel = new JLabel("New slang sord");
+        JLabel newSlangWordLabel = new JLabel("New slang word");
         JTextField newSlangWordTextField = new JTextField(15);
         JLabel newDefinitionLabel = new JLabel("New definition");
         JTextField newDefinitionTextField = new JTextField(15);
@@ -328,12 +324,14 @@ public class Main {
         addBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//                String slangWord = textField1.getText();
-//                String definition = textField2.getText();
+                String slangWord = oldSlangWordTextField.getText();
+                String definition = SlangWord.searchDefinition(slangWord);
 
-//                Boolean check = SlangWord.editSlangWord(slangWord,definition);
-//                if (check == true) statusTextField.setText("Success!");
-//                else statusTextField.setText("Fail!");
+                String newSlangWord = newSlangWordTextField.getText();
+                String newDefinition = newDefinitionTextField.getText();
+                Boolean check = SlangWord.editSlangWord(slangWord,definition,newSlangWord,newDefinition);
+                if (check == true) statusTextField.setText("Success!");
+                else statusTextField.setText("Fail!");
             }
         });
     }
@@ -400,7 +398,7 @@ public class Main {
         setUpListener();
         editSlangWordScreen();
 
-        searchByDefinitionScreen.setVisible(true);
+        editSlangWordScreen.setVisible(true);
 
 //        System.out.println(SlangWord.searchDefinition("HOLS"));
 
