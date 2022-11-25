@@ -18,6 +18,11 @@ public class SlangWord {
      static private HashMap<String, HashMap<String, Boolean>> originKeyWordDictionary;
      static private HashMap<String, HashMap<String, Boolean>> originDefinitionDictionary;
 
+
+     public static String searchDefinition(String slangWord)
+     {
+         return dictionary.get(slangWord);
+     }
      /*
       * THIS FUNCTION RETURN HASHMAP CONTAIN <KEYWORD , HASHMAP<SLANGWORD, BOOLEAN>>
       * KEYWORD IS THE KEYWORD USER INPUT

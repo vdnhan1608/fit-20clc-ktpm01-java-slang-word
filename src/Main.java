@@ -1,9 +1,12 @@
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.synth.SynthTextAreaUI;
+import javax.swing.text.BadLocationException;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,6 +47,7 @@ public class Main {
 
     public static JFrame addSlangWordScreen = new JFrame("Add new slang words");
 
+    public static JFrame editSlangWordScreen = new JFrame("Edit slang words");
     /*
      * Desc: Screen search by definition
      * */
@@ -66,8 +70,18 @@ public class Main {
         JScrollPane scrollPane = new JScrollPane(textArea);
         pane2.add(scrollPane);
 
+        JPanel pane3 = new JPanel();
+        pane3.setLayout(new FlowLayout());
+        JLabel meaningLabel = new JLabel("Meaning");
+        JTextField meaningTextField = new JTextField(15);
+        pane3.add(meaningLabel);
+        pane3.add(meaningTextField);
+
+
+
         pane.add(pane1, BorderLayout.PAGE_START);
-        pane.add(pane2, BorderLayout.PAGE_END);
+        pane.add(pane2, BorderLayout.CENTER);
+        pane.add(pane3, BorderLayout.PAGE_END);
         searchByDefinitionScreen.pack();
 
         /*
@@ -83,6 +97,28 @@ public class Main {
                 for (int i = 0 ; i < slangWords.length ; i ++) textArea.append(slangWords[i]  +"\n");
             }
         });
+        textArea.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e)   {
+                super.mouseClicked(e);
+                try{
+                    int line = textArea.getLineOfOffset( textArea.getCaretPosition() );
+                    int start = textArea.getLineStartOffset( line );
+                    int end = textArea.getLineEndOffset( line );
+                    String text = textArea.getDocument().getText(start, end - start);
+                    meaningTextField.setText("");
+                    String slangWord = text.substring(0,text.length()-1);
+                    String definition = SlangWord.searchDefinition(slangWord);
+                    meaningTextField.setText(slangWord+ " : " + definition);
+                }
+                catch (BadLocationException badLocationException)
+                {
+                    System.out.println(badLocationException);
+                }
+
+            }
+        });
+
 
     }
 
@@ -112,8 +148,18 @@ public class Main {
         JScrollPane scrollPane = new JScrollPane(textArea);
         pane2.add(scrollPane);
 
+
+        JPanel pane3 = new JPanel();
+        pane3.setLayout(new FlowLayout());
+        JLabel meaningLabel = new JLabel("Meaning");
+        JTextField meaningTextField = new JTextField(15);
+        pane3.add(meaningLabel);
+        pane3.add(meaningTextField);
+
         contentPane.add(pane1,BorderLayout.PAGE_START);
-        contentPane.add(pane2, BorderLayout.PAGE_END);
+        contentPane.add(pane2, BorderLayout.CENTER);
+        contentPane.add(pane3, BorderLayout.PAGE_END);
+
 
         /*
         * Xu ly su kien
@@ -131,6 +177,28 @@ public class Main {
             }
         });
 
+        textArea.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e)   {
+                super.mouseClicked(e);
+                try{
+                    int line = textArea.getLineOfOffset( textArea.getCaretPosition() );
+                    int start = textArea.getLineStartOffset( line );
+                    int end = textArea.getLineEndOffset( line );
+                    String text = textArea.getDocument().getText(start, end - start);
+                    meaningTextField.setText("");
+                    String slangWord = text.substring(0,text.length()-1);
+                    String definition = SlangWord.searchDefinition(slangWord);
+                    meaningTextField.setText(slangWord+ " : " + definition);
+                }
+                catch (BadLocationException badLocationException)
+                {
+                    System.out.println(badLocationException);
+                }
+
+            }
+        });
+
         searchByKeywordScreen.pack();
     }
 
@@ -143,7 +211,7 @@ public class Main {
         addSlangWordScreen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         addSlangWordScreen.setPreferredSize(new Dimension(300, 200));
         Container pane = addSlangWordScreen.getContentPane();
-        pane.setLayout(new BorderLayout());
+        pane.setLayout(new BoxLayout(pane, BoxLayout.PAGE_AXIS));
         // Test search by definition xem co ra tu moi them vao khong
         JPanel pane1 = new JPanel();
         pane1.setLayout(new FlowLayout());
@@ -159,15 +227,24 @@ public class Main {
         pane2.add(label2);
         pane2.add(textField2);
 
-
         JPanel pane3 = new JPanel();
         pane3.setLayout(new FlowLayout());
-        JButton addBtn = new JButton("Add");
-        pane3.add(addBtn);
+        JLabel statusLabel = new JLabel("Status");
+        pane3.add(statusLabel);
+        JTextField statusTextField = new JTextField(15);
+        statusTextField.setEditable(false);
+        statusTextField.setHorizontalAlignment(JTextField.CENTER);
+        pane3.add(statusTextField);
 
-        pane.add(pane1, BorderLayout.PAGE_START);
-        pane.add(pane2, BorderLayout.CENTER);
-        pane.add(pane3,BorderLayout.PAGE_END);
+        JPanel pane4 = new JPanel();
+        pane4.setLayout(new FlowLayout());
+        JButton addBtn = new JButton("Add");
+        pane4.add(addBtn);
+
+        pane.add(pane1);
+        pane.add(pane2);
+        pane.add(pane3);
+        pane.add(pane4);
 
         addSlangWordScreen.pack();
 
@@ -182,8 +259,81 @@ public class Main {
                 String definition = textField2.getText();
 
                 Boolean check = SlangWord.addSlangWord(slangWord,definition);
-                if (check) System.out.println("Added");
-                else System.out.println("Duplicate");
+                if (check == true) statusTextField.setText("Added!");
+                else statusTextField.setText("Duplicate!");
+            }
+        });
+    }
+
+
+    /*
+    * Desc: Edit slang word screen
+    * */
+    public static void editSlangWordScreen()
+    {
+        editSlangWordScreen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        editSlangWordScreen.setPreferredSize(new Dimension(800, 200));
+        Container pane = editSlangWordScreen.getContentPane();
+        pane.setLayout(new BoxLayout(pane, BoxLayout.PAGE_AXIS));
+        // Test search by definition xem co ra tu moi them vao khong
+        JPanel pane1 = new JPanel();
+        pane1.setLayout(new FlowLayout());
+        JLabel oldSlangWordLabel = new JLabel("Slang Word");
+        JTextField oldSlangWordTextField = new JTextField(15);
+        JLabel oldDefinitionLabel = new JLabel("Definition");
+        JTextField oldDefinitionTextField = new JTextField(15);
+        pane1.add(oldSlangWordLabel);
+        pane1.add(oldSlangWordTextField);
+        pane1.add(oldDefinitionLabel);
+        pane1.add(oldDefinitionTextField);
+
+
+        JPanel pane2 = new JPanel();
+        pane2.setLayout(new FlowLayout());
+        JLabel newSlangWordLabel = new JLabel("New slang sord");
+        JTextField newSlangWordTextField = new JTextField(15);
+        JLabel newDefinitionLabel = new JLabel("New definition");
+        JTextField newDefinitionTextField = new JTextField(15);
+
+        pane2.add(newSlangWordLabel);
+        pane2.add(newSlangWordTextField);
+        pane2.add(newDefinitionLabel);
+        pane2.add(newDefinitionTextField);
+
+        JPanel pane3 = new JPanel();
+        pane3.setLayout(new FlowLayout());
+        JLabel statusLabel = new JLabel("Status");
+        pane3.add(statusLabel);
+        JTextField statusTextField = new JTextField(15);
+        statusTextField.setEditable(false);
+        statusTextField.setHorizontalAlignment(JTextField.CENTER);
+        pane3.add(statusTextField);
+
+        JPanel pane4 = new JPanel();
+        pane4.setLayout(new FlowLayout());
+        JButton addBtn = new JButton("Edit");
+        pane4.add(addBtn);
+
+        pane.add(pane1);
+        pane.add(pane2);
+        pane.add(pane3);
+        pane.add(pane4);
+
+        editSlangWordScreen.pack();
+
+        /*
+         * Event handle
+         * */
+
+        addBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+//                String slangWord = textField1.getText();
+//                String definition = textField2.getText();
+
+//                Boolean check = SlangWord.editSlangWord(slangWord,definition);
+//                if (check == true) statusTextField.setText("Success!");
+//                else statusTextField.setText("Fail!");
             }
         });
     }
@@ -244,12 +394,15 @@ public class Main {
         SlangWord.loadDataByKeyWord();
         SlangWord.loadData();
 
-        //mainScreen();
+        mainScreen();
         searchByKeywordScreen();
+        searchByDefinitionScreen();
         setUpListener();
-        addSlangWordScreen();
+        editSlangWordScreen();
 
-        addSlangWordScreen.setVisible(true);
+        searchByDefinitionScreen.setVisible(true);
+
+//        System.out.println(SlangWord.searchDefinition("HOLS"));
 
 
 
