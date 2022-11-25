@@ -48,6 +48,8 @@ public class Main {
     public static JFrame addSlangWordScreen = new JFrame("Add new slang words");
 
     public static JFrame editSlangWordScreen = new JFrame("Edit slang words");
+
+    public static JFrame deleteSlangWordScreen = new JFrame("Delete slang words");
     /*
      * Desc: Screen search by definition
      * */
@@ -336,6 +338,73 @@ public class Main {
         });
     }
 
+
+    /*
+    * Desc: Delete slang word screen
+    * */
+
+    public static void deleteSlangWordScreen()
+    {
+        deleteSlangWordScreen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        deleteSlangWordScreen.setPreferredSize(new Dimension(300, 200));
+        Container pane = deleteSlangWordScreen.getContentPane();
+
+        pane.setLayout(new BoxLayout(pane, BoxLayout.PAGE_AXIS));
+        // Test search by definition xem co ra tu moi them vao khong
+        JPanel pane1 = new JPanel();
+        pane1.setLayout(new FlowLayout());
+        JLabel label1 = new JLabel("Slang Word");
+        JTextField textField1 = new JTextField(15);
+        pane1.add(label1);
+        pane1.add(textField1);
+
+
+        JPanel pane3 = new JPanel();
+        pane3.setLayout(new FlowLayout());
+        JLabel statusLabel = new JLabel("Status");
+        pane3.add(statusLabel);
+        JTextField statusTextField = new JTextField(15);
+        statusTextField.setEditable(false);
+        statusTextField.setText("Confirm before deleting");
+        statusTextField.setHorizontalAlignment(JTextField.CENTER);
+        pane3.add(statusTextField);
+
+        JPanel pane4 = new JPanel();
+        pane4.setLayout(new FlowLayout());
+        JButton confirmBtn = new JButton("Confirm");
+        pane4.add(confirmBtn);
+        JButton deleteBtn = new JButton("Delete");
+        pane4.add(deleteBtn);
+
+        pane.add(pane1);
+        pane.add(pane3);
+        pane.add(pane4);
+
+        deleteSlangWordScreen.pack();
+
+
+
+        /*
+        * Xu ly su kien
+        * */
+
+
+        confirmBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                deleteBtn.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        statusTextField.setText("");
+                        if (SlangWord.deleteSlangWord(textField1.getText()) == true) statusTextField.setText("Success");
+                        else statusTextField.setText("Fail");
+                    }
+                });
+            }
+        });
+
+
+    }
     /*
     * Desc: Create main screen
     * */
@@ -397,8 +466,9 @@ public class Main {
         searchByDefinitionScreen();
         setUpListener();
         editSlangWordScreen();
+        deleteSlangWordScreen();
 
-        editSlangWordScreen.setVisible(true);
+        deleteSlangWordScreen.setVisible(true);
 
 //        System.out.println(SlangWord.searchDefinition("HOLS"));
 
