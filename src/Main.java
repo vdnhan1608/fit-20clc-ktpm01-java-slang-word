@@ -50,6 +50,10 @@ public class Main {
     public static JFrame editSlangWordScreen = new JFrame("Edit slang words");
 
     public static JFrame deleteSlangWordScreen = new JFrame("Delete slang words");
+
+    public static JFrame resetSlangWordScreen = new JFrame("Reset slang words");
+
+    public static JFrame randomSlangWord = new JFrame("Random slang word");
     /*
      * Desc: Screen search by definition
      * */
@@ -405,6 +409,82 @@ public class Main {
 
 
     }
+
+    /*
+    * Desc: Reset slang word (alert actually)
+    *
+    * */
+
+    public static void resetSlangWordScreen()
+    {
+        SlangWord.resetSlangWord();
+
+        resetSlangWordScreen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        resetSlangWordScreen.setPreferredSize(new Dimension(200, 200));
+        resetSlangWordScreen.setLocationRelativeTo(null);
+        Container pane = resetSlangWordScreen.getContentPane();
+        pane.setLayout(new BorderLayout());
+
+
+
+        JPanel pane1 = new JPanel();
+        pane1.setLayout(new FlowLayout());
+        JLabel label = new JLabel("Successfully reset!");
+        pane1.add(label);
+
+        JPanel pane2 = new JPanel();
+        pane2.setLayout(new FlowLayout());
+        JButton btn = new JButton("Return");
+        pane2.add(btn);
+
+        pane.add(pane1,BorderLayout.CENTER);
+        pane.add(pane2,BorderLayout.PAGE_END);
+
+
+        resetSlangWordScreen.pack();
+    }
+
+    /*
+    * Desc: Random slang word
+    * */
+    public static void randomSlangWord()
+    {
+        HashMap<String, String> slangWord = SlangWord.randomSlangWord();
+        String word = slangWord.keySet().toString().substring(1,  slangWord.keySet().toString().length()-1);
+        String definition = slangWord.get(word);
+        randomSlangWord.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        randomSlangWord.setPreferredSize(new Dimension(400, 200));
+        Container pane = randomSlangWord.getContentPane();
+        pane.setLayout(new GridLayout(3,1));
+
+        JPanel pane1 = new JPanel();
+        pane1.setLayout(new FlowLayout());
+        JLabel slangWordLabel = new JLabel("Slang Word");
+        JTextField slangWordTextField = new JTextField(15);
+        slangWordTextField.setHorizontalAlignment(JTextField.CENTER);
+        slangWordTextField.setText(word);
+        pane1.add(slangWordLabel);
+        pane1.add(slangWordTextField);
+
+        JPanel pane2 = new JPanel();
+        pane2.setLayout(new FlowLayout());
+        JLabel definitionLabel = new JLabel("Definition");
+        JTextField definitionTextField = new JTextField(15);
+        definitionTextField.setHorizontalAlignment(JTextField.CENTER);
+        definitionTextField.setText(definition);
+        pane2.add(definitionLabel);
+        pane2.add(definitionTextField);
+
+        JPanel pane3 = new JPanel();
+        pane3.setLayout(new FlowLayout());
+        JButton btn = new JButton("Return");
+        pane3.add(btn);
+
+        pane.add(pane1);
+        pane.add(pane2);
+        pane.add(pane3);
+        randomSlangWord.pack();
+    }
     /*
     * Desc: Create main screen
     * */
@@ -467,8 +547,10 @@ public class Main {
         setUpListener();
         editSlangWordScreen();
         deleteSlangWordScreen();
+        resetSlangWordScreen();
+        randomSlangWord();
 
-        deleteSlangWordScreen.setVisible(true);
+        randomSlangWord.setVisible(true);
 
 //        System.out.println(SlangWord.searchDefinition("HOLS"));
 
