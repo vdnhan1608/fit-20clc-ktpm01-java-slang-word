@@ -11,6 +11,7 @@ public class SlangWord {
      static private HashMap<String, HashMap<String, Boolean>> keywordDictionary = new HashMap<String, HashMap<String, Boolean>>();
      static private HashMap<String, HashMap<String, Boolean>> definitionDictionary = new HashMap<String, HashMap<String, Boolean>>();
 
+     public static ArrayList<String> searchedSlangWords ;
      /*
       * These 3 hashmap will be the origin to reset
       * */
@@ -249,14 +250,22 @@ public class SlangWord {
       * */
 
      public static ArrayList<String> showHistory(String fileName) throws IOException {
-         ArrayList<String> slangWords = new ArrayList<String>();
-         BufferedReader br = new BufferedReader(new FileReader(fileName));
-         String line = br.readLine();
-         while (line != null) {
-             slangWords.add(line);
-             line = br.readLine();
+         try {
+             ArrayList<String> slangWords = new ArrayList<String>();
+             BufferedReader br = new BufferedReader(new FileReader(fileName));
+             String line = br.readLine();
+             while (line != null) {
+                 slangWords.add(line);
+                 line = br.readLine();
+             }
+             return slangWords;
          }
-         return slangWords;
+         catch (IOException ie)
+         {
+             System.out.println(ie);
+         }
+
+         return null;
      }
 
      /*

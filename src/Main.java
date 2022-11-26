@@ -55,6 +55,8 @@ public class Main {
     public static JFrame guessDefiniton = new JFrame("Guess definiton");
 
     public static JFrame guessSlangWord = new JFrame("Guess slang word");
+
+    public static JFrame historyScreen = new JFrame("History words");
     /*
      * Desc: Screen search by definition
      * */
@@ -119,10 +121,15 @@ public class Main {
                     String slangWord = text.substring(0,text.length()-1);
                     String definition = SlangWord.searchDefinition(slangWord);
                     meaningTextField.setText(slangWord+ " : " + definition);
+
+                    SlangWord.saveHistory(slangWord, "history.txt"); // Save to History
+                    SlangWord.searchedSlangWords = SlangWord.showHistory("history.txt"); // update history
                 }
                 catch (BadLocationException badLocationException)
                 {
                     System.out.println(badLocationException);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
                 }
 
             }
@@ -212,10 +219,15 @@ public class Main {
                     String slangWord = text.substring(0,text.length()-1);
                     String definition = SlangWord.searchDefinition(slangWord);
                     meaningTextField.setText(slangWord+ " : " + definition);
+
+                    SlangWord.saveHistory(slangWord, "history.txt");
+                    SlangWord.searchedSlangWords = SlangWord.showHistory("history.txt");
                 }
                 catch (BadLocationException badLocationException)
                 {
                     System.out.println(badLocationException);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
                 }
 
             }
@@ -541,6 +553,74 @@ public class Main {
         });
     }
 
+    /*
+    * Desc: History screen for words searched
+    * */
+    public static void historyScreen()
+    {
+        historyScreen.setPreferredSize(new Dimension(300, 300));
+        Container pane = historyScreen.getContentPane();
+        pane.setLayout(new BoxLayout(pane, BoxLayout.PAGE_AXIS));
+
+        try{
+            SlangWord.searchedSlangWords = SlangWord.showHistory("history.txt");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        JPanel pane1 = new JPanel();
+        pane1.setLayout(new FlowLayout());
+        JTextArea textArea = new JTextArea(20,20);
+        for (int i = 0 ; i < SlangWord.searchedSlangWords.size(); i++) textArea.append(SlangWord.searchedSlangWords.get(i) + "\n");
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        pane1.add(scrollPane);
+
+        JPanel pane2 = new JPanel();
+        pane2.setLayout(new FlowLayout());
+        JButton btn = new JButton("Return");
+        pane2.add(btn);
+
+        pane.add(pane1);
+        pane.add(pane2);
+        historyScreen.pack();
+
+        /*
+        * Handle event
+        * */
+        historyScreen.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                historyScreen.setVisible(false);
+                textArea.setText("");
+                try{
+                    SlangWord.searchedSlangWords = SlangWord.showHistory("history.txt");
+                } catch (IOException ie) {
+                    throw new RuntimeException(ie);
+                }
+                for (int i = 0 ; i < SlangWord.searchedSlangWords.size(); i++) textArea.append(SlangWord.searchedSlangWords.get(i) + "\n");
+
+                mainScreen.setVisible(true);
+            }
+        });
+
+        btn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                historyScreen.setVisible(false);
+                textArea.setText("");
+                try{
+                    SlangWord.searchedSlangWords = SlangWord.showHistory("history.txt");
+                } catch (IOException ie) {
+                    throw new RuntimeException(ie);
+                }
+                for (int i = 0 ; i < SlangWord.searchedSlangWords.size(); i++) textArea.append(SlangWord.searchedSlangWords.get(i) + "\n");
+
+                mainScreen.setVisible(true);
+            }
+        });
+
+    }
     /*
     * Desc: Random slang word
     * */
@@ -1070,6 +1150,14 @@ public class Main {
             }
         });
 
+        historyBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mainScreen.setVisible(false);
+                historyScreen.setVisible(true);
+            }
+        });
+
         randomBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -1112,14 +1200,10 @@ public class Main {
         editSlangWordScreen();
         deleteSlangWordScreen();
         resetSlangWordScreen();
+        historyScreen();
         randomSlangWord();
         guessDefiniton();
         guessSlangWord();
-
-
-//        System.out.println(SlangWord.searchDefinition("HOLS"));
-
-
 
 
 
