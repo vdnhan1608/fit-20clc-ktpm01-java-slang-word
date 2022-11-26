@@ -3,10 +3,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.synth.SynthTextAreaUI;
 import javax.swing.text.BadLocationException;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,7 +60,7 @@ public class Main {
      * */
     public static void searchByDefinitionScreen()
     {
-        searchByDefinitionScreen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         searchByDefinitionScreen.setSize(200,200);
         Container pane = searchByDefinitionScreen.getContentPane();
         pane.setLayout(new BorderLayout());
@@ -72,11 +69,13 @@ public class Main {
         pane1.setLayout(new FlowLayout());
         JLabel label = new JLabel("Search");
         JTextField textField = new JTextField(10);
+        textField.setText("");
         pane1.add(label);
         pane1.add (textField);
 
         JPanel pane2 = new JPanel();
         JTextArea textArea = new JTextArea(20,50);
+        textArea.setText("");
         JScrollPane scrollPane = new JScrollPane(textArea);
         pane2.add(scrollPane);
 
@@ -129,7 +128,20 @@ public class Main {
             }
         });
 
-
+        searchByDefinitionScreen.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                searchByDefinitionScreen.setVisible(false);
+                /*
+                * Delete history of search word
+                * */
+                textField.setText("");
+                textArea.setText("");
+                meaningTextField.setText("");
+                mainScreen.setVisible(true);
+            }
+        });
     }
 
 
@@ -697,6 +709,7 @@ public class Main {
         mainScreen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainScreen.setPreferredSize(new Dimension(500, 600));
 
+
         JPanel pane = new JPanel();
         pane.setLayout(new GridLayout(5,2));
         pane.setBorder(new EmptyBorder(10,10,10,10));
@@ -723,20 +736,86 @@ public class Main {
         mainScreen.getContentPane().add(pane);
 
         mainScreen.pack();
-//        frame.setVisible(true);
-    }
-    /*
-    * Set up listener for the button
-    * */
-    public static void setUpListener()
-    {
+        mainScreen.setVisible(true);
+        /*
+        * Handle screen navigation
+        * Thieu screen load history
+        * */
+        searchBtnByKeyWord.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mainScreen.setVisible(false);
+                searchByKeywordScreen.setVisible(true);
+            }
+        });
+
         searchBtnByDefinition.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("search by definition");
+                mainScreen.setVisible(false);
+                searchByDefinitionScreen.setVisible(true);
             }
         });
+
+        addBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mainScreen.setVisible(false);
+                addSlangWordScreen.setVisible(true);
+            }
+        });
+
+        editBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mainScreen.setVisible(false);
+                editSlangWordScreen.setVisible(true);
+            }
+        });
+
+        deleteBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mainScreen.setVisible(false);
+                deleteSlangWordScreen.setVisible(true);
+            }
+        });
+
+        resetBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mainScreen.setVisible(false);
+                resetSlangWordScreen.setVisible(true);
+            }
+        });
+
+        randomBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mainScreen.setVisible(false);
+                randomSlangWord.setVisible(true);
+            }
+        });
+
+        guessDefinitionBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mainScreen.setVisible(false);
+                guessDefiniton.setVisible(true);
+            }
+        });
+
+        guessSlangWordBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mainScreen.setVisible(false);
+                guessSlangWord.setVisible(true);
+            }
+        });
+
+
     }
+
 
 
     public static void  main(String[] args) throws IOException {
@@ -749,7 +828,6 @@ public class Main {
         addSlangWordScreen();
         searchByKeywordScreen();
         searchByDefinitionScreen();
-        setUpListener();
         editSlangWordScreen();
         deleteSlangWordScreen();
         resetSlangWordScreen();
@@ -757,7 +835,6 @@ public class Main {
         guessDefiniton();
         guessSlangWord();
 
-        guessDefiniton.setVisible(true);
 
 //        System.out.println(SlangWord.searchDefinition("HOLS"));
 
