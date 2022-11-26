@@ -150,7 +150,7 @@ public class Main {
     * */
     public static void searchByKeywordScreen()
     {
-        searchByKeywordScreen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         searchByKeywordScreen.setSize(200, 200);
 
         Container contentPane = searchByKeywordScreen.getContentPane();
@@ -221,6 +221,21 @@ public class Main {
             }
         });
 
+        searchByKeywordScreen.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                searchByDefinitionScreen.setVisible(false);
+                /*
+                * Delete history of searching
+                * */
+                textField.setText("");
+                textArea.setText("");
+                meaningTextField.setText("");
+
+                mainScreen.setVisible(true);
+            }
+        });
         searchByKeywordScreen.pack();
     }
 
@@ -230,7 +245,7 @@ public class Main {
     * */
     public static void addSlangWordScreen()
     {
-        addSlangWordScreen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         addSlangWordScreen.setPreferredSize(new Dimension(300, 200));
         Container pane = addSlangWordScreen.getContentPane();
         pane.setLayout(new BoxLayout(pane, BoxLayout.PAGE_AXIS));
@@ -268,7 +283,7 @@ public class Main {
         pane.add(pane3);
         pane.add(pane4);
 
-        addSlangWordScreen.pack();
+
 
         /*
         * Event handle
@@ -285,6 +300,25 @@ public class Main {
                 else statusTextField.setText("Duplicate!");
             }
         });
+
+        addSlangWordScreen.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                addSlangWordScreen.setVisible(false);
+                /*
+                * Clear textfield before navigate to main screen
+                * */
+
+                textField1.setText("");
+                textField2.setText("");
+                statusTextField.setText("");
+
+                mainScreen.setVisible(true);
+            }
+        });
+
+        addSlangWordScreen.pack();
     }
 
 
@@ -293,7 +327,7 @@ public class Main {
     * */
     public static void editSlangWordScreen()
     {
-        editSlangWordScreen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         editSlangWordScreen.setPreferredSize(new Dimension(800, 200));
         Container pane = editSlangWordScreen.getContentPane();
         pane.setLayout(new BoxLayout(pane, BoxLayout.PAGE_AXIS));
@@ -356,6 +390,22 @@ public class Main {
                 else statusTextField.setText("Fail!");
             }
         });
+
+        editSlangWordScreen.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                editSlangWordScreen.setVisible(false);
+                // Clear history before navigate to main
+                oldSlangWordTextField.setText("");
+                newSlangWordTextField.setText("");
+                newDefinitionTextField.setText("");
+                statusTextField.setText("");
+
+                mainScreen.setVisible(true);
+
+            }
+        });
     }
 
 
@@ -365,7 +415,7 @@ public class Main {
 
     public static void deleteSlangWordScreen()
     {
-        deleteSlangWordScreen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         deleteSlangWordScreen.setPreferredSize(new Dimension(300, 200));
         Container pane = deleteSlangWordScreen.getContentPane();
 
@@ -423,6 +473,18 @@ public class Main {
             }
         });
 
+        deleteSlangWordScreen.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                deleteSlangWordScreen.setVisible(false);
+                // Clear history
+                textField1.setText("");
+                statusTextField.setText("Confirm before deleting");
+
+                mainScreen.setVisible(true);
+            }
+        });
 
     }
 
@@ -435,7 +497,7 @@ public class Main {
     {
         SlangWord.resetSlangWord();
 
-        resetSlangWordScreen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         resetSlangWordScreen.setPreferredSize(new Dimension(200, 200));
         resetSlangWordScreen.setLocationRelativeTo(null);
         Container pane = resetSlangWordScreen.getContentPane();
@@ -458,6 +520,25 @@ public class Main {
 
 
         resetSlangWordScreen.pack();
+        /*
+        * Handle event
+        * */
+        resetSlangWordScreen.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                resetSlangWordScreen.setVisible(false);
+                mainScreen.setVisible(true);
+            }
+        });
+
+        btn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                resetSlangWordScreen.setVisible(false);
+                mainScreen.setVisible(true);
+            }
+        });
     }
 
     /*
@@ -468,7 +549,7 @@ public class Main {
         HashMap<String, String> slangWord = SlangWord.randomSlangWord();
         String word = slangWord.keySet().toString().substring(1,  slangWord.keySet().toString().length()-1);
         String definition = slangWord.get(word);
-        randomSlangWord.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         randomSlangWord.setPreferredSize(new Dimension(400, 200));
         Container pane = randomSlangWord.getContentPane();
         pane.setLayout(new GridLayout(3,1));
@@ -500,6 +581,37 @@ public class Main {
         pane.add(pane2);
         pane.add(pane3);
         randomSlangWord.pack();
+
+        /*
+        * Handle event
+        * */
+        randomSlangWord.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                randomSlangWord.setVisible(false);
+                // Clear history
+                HashMap<String, String> slangWord = SlangWord.randomSlangWord();
+                String word = slangWord.keySet().toString().substring(1,  slangWord.keySet().toString().length()-1);
+                String definition = slangWord.get(word);
+                slangWordTextField.setText(word);
+                definitionTextField.setText(definition);
+                mainScreen.setVisible(true);
+            }
+        });
+        btn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                randomSlangWord.setVisible(false);
+                // Clear history
+                HashMap<String, String> slangWord = SlangWord.randomSlangWord();
+                String word = slangWord.keySet().toString().substring(1,  slangWord.keySet().toString().length()-1);
+                String definition = slangWord.get(word);
+                slangWordTextField.setText(word);
+                definitionTextField.setText(definition);
+                mainScreen.setVisible(true);
+            }
+        });
     }
 
     /*
@@ -511,27 +623,15 @@ public class Main {
         * Handle to get random slang word
         * Generate 4 random slang word, pick one randomly for question
         * */
-        ArrayList<String> slangWords = new ArrayList<String>();
-        ArrayList<String> definitions = new ArrayList<String>();
-        HashMap<String, String> slangWord ;
-        for (int i = 0 ; i < 4 ;i ++)
-        {
-            slangWord = SlangWord.randomSlangWord();
-            String word = slangWord.keySet().toString().substring(1,slangWord.keySet().toString().length()-1);
-            slangWords.add(word);
-            definitions.add(SlangWord.searchDefinition(word));
-        }
+        ArrayList<String> slangWords = SlangWord.generateRandomSlangWordList();
+        ArrayList<String> definitions = SlangWord.generateRandomDefinitionList(slangWords);
+        int randomIndex = SlangWord.randomIndex();
 
 
-
-        Random rand = new Random();
-        int upper_bound = 4;
-        int randomIndex = rand.nextInt(upper_bound);
 
 
 
         /**/
-        guessDefiniton.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         guessDefiniton.setPreferredSize(new Dimension(500, 300));
         Container pane = guessDefiniton.getContentPane();
         pane.setLayout(new BoxLayout(pane, BoxLayout.PAGE_AXIS));
@@ -598,6 +698,103 @@ public class Main {
                 }
             });
         }
+        guessDefiniton.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                guessDefiniton.setVisible(false);
+
+                ArrayList<String> slangWords = SlangWord.generateRandomSlangWordList();
+                ArrayList<String> definitions = SlangWord.generateRandomDefinitionList(slangWords);
+                int randomIndex = SlangWord.randomIndex();
+
+                slangWordTextField.setText(slangWords.get(randomIndex));
+
+                for (int i = 0 ; i < 4; i++)
+                {
+                    answers[i].setText(definitions.get(i));
+                }
+
+                for (int i = 0 ; i < 4; i++)
+                {
+                    final int index = i;
+                    answers[i].addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                            super.mouseClicked(e);
+                            if (index == randomIndex) statusTextField.setText("Correct");
+                            else statusTextField.setText("False");
+                        }
+                    });
+                }
+                statusTextField.setText("");
+                mainScreen.setVisible(true);
+            }
+        });
+
+        returnBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                guessDefiniton.setVisible(false);
+
+                ArrayList<String> slangWords = SlangWord.generateRandomSlangWordList();
+                ArrayList<String> definitions = SlangWord.generateRandomDefinitionList(slangWords);
+                int randomIndex = SlangWord.randomIndex();
+
+                slangWordTextField.setText(slangWords.get(randomIndex));
+
+                for (int i = 0 ; i < 4; i++)
+                {
+                    answers[i].setText(definitions.get(i));
+                }
+
+                for (int i = 0 ; i < 4; i++)
+                {
+                    final int index = i;
+                    answers[i].addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                            super.mouseClicked(e);
+                            if (index == randomIndex) statusTextField.setText("Correct");
+                            else statusTextField.setText("False");
+                        }
+                    });
+                }
+                statusTextField.setText("");
+                mainScreen.setVisible(true);
+            }
+        });
+
+        playAgainBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ArrayList<String> slangWords = SlangWord.generateRandomSlangWordList();
+                ArrayList<String> definitions = SlangWord.generateRandomDefinitionList(slangWords);
+                int randomIndex = SlangWord.randomIndex();
+
+                slangWordTextField.setText(slangWords.get(randomIndex));
+
+                for (int i = 0 ; i < 4; i++)
+                {
+                    answers[i].setText(definitions.get(i));
+                }
+
+                for (int i = 0 ; i < 4; i++)
+                {
+                    final int index = i;
+                    answers[i].addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                            super.mouseClicked(e);
+                            if (index == randomIndex) statusTextField.setText("Correct");
+                            else statusTextField.setText("False");
+                        }
+                    });
+                }
+                statusTextField.setText("");
+            }
+        });
+
     }
 
     /*
@@ -609,28 +806,13 @@ public class Main {
          * Handle to get random slang word
          * Generate 4 random slang word, pick one randomly for question
          * */
-        ArrayList<String> slangWords = new ArrayList<String>();
-        ArrayList<String> definitions = new ArrayList<String>();
-        HashMap<String, String> slangWord ;
-        for (int i = 0 ; i < 4 ;i ++)
-        {
-            slangWord = SlangWord.randomSlangWord();
-            String word = slangWord.keySet().toString().substring(1,slangWord.keySet().toString().length()-1);
-            slangWords.add(word);
-            definitions.add(SlangWord.searchDefinition(word));
-        }
+        ArrayList<String> slangWords = SlangWord.generateRandomSlangWordList();
+        ArrayList<String> definitions = SlangWord.generateRandomDefinitionList(slangWords);
+        int randomIndex = SlangWord.randomIndex();
 
-
-
-        Random rand = new Random();
-        int upper_bound = 4;
-        int randomIndex = rand.nextInt(upper_bound);
-
-        System.out.println(randomIndex);
 
 
         /**/
-        guessSlangWord.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         guessSlangWord.setPreferredSize(new Dimension(500, 300));
         Container pane = guessSlangWord.getContentPane();
         pane.setLayout(new BoxLayout(pane, BoxLayout.PAGE_AXIS));
@@ -699,6 +881,105 @@ public class Main {
                 }
             });
         }
+
+
+        guessSlangWord.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                guessSlangWord.setVisible(false);
+
+                ArrayList<String> slangWords = SlangWord.generateRandomSlangWordList();
+                ArrayList<String> definitions = SlangWord.generateRandomDefinitionList(slangWords);
+                int randomIndex = SlangWord.randomIndex();
+
+                slangWordTextField.setText(definitions.get(randomIndex));
+
+                for (int i = 0 ; i < 4; i++)
+                {
+                    answers[i].setText(slangWords.get(i));
+                }
+
+                for (int i = 0 ; i < 4; i++)
+                {
+                    final int index = i;
+                    answers[i].addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                            super.mouseClicked(e);
+                            if (index == randomIndex) statusTextField.setText("Correct");
+                            else statusTextField.setText("False");
+                        }
+                    });
+                }
+                statusTextField.setText("");
+                mainScreen.setVisible(true);
+            }
+        });
+
+        returnBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                guessSlangWord.setVisible(false);
+
+                ArrayList<String> slangWords = SlangWord.generateRandomSlangWordList();
+                ArrayList<String> definitions = SlangWord.generateRandomDefinitionList(slangWords);
+                int randomIndex = SlangWord.randomIndex();
+
+                slangWordTextField.setText(definitions.get(randomIndex));
+
+                for (int i = 0 ; i < 4; i++)
+                {
+                    answers[i].setText(slangWords.get(i));
+                }
+
+                for (int i = 0 ; i < 4; i++)
+                {
+                    final int index = i;
+                    answers[i].addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                            super.mouseClicked(e);
+                            if (index == randomIndex) statusTextField.setText("Correct");
+                            else statusTextField.setText("False");
+                        }
+                    });
+                }
+                statusTextField.setText("");
+                mainScreen.setVisible(true);
+            }
+        });
+
+        playAgainBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ArrayList<String> slangWords = SlangWord.generateRandomSlangWordList();
+                ArrayList<String> definitions = SlangWord.generateRandomDefinitionList(slangWords);
+                int randomIndex = SlangWord.randomIndex();
+
+                slangWordTextField.setText(definitions.get(randomIndex));
+
+                for (int i = 0 ; i < 4; i++)
+                {
+                    answers[i].setText(slangWords.get(i));
+                }
+
+                for (int i = 0 ; i < 4; i++)
+                {
+                    final int index = i;
+                    answers[i].addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                            super.mouseClicked(e);
+                            if (index == randomIndex) statusTextField.setText("Correct");
+                            else statusTextField.setText("False");
+                        }
+                    });
+                }
+                statusTextField.setText("");
+            }
+        });
+
     }
 
     /*

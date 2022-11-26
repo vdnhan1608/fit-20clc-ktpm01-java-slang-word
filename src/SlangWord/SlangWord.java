@@ -304,17 +304,45 @@ public class SlangWord {
      }
 
      /*
-      * Desc: Show 1 slang word, user guess the definition
+      * Desc: Generate list of 4 slang words
       * */
-     public static void guessDefiniton() {
+     public static ArrayList<String> generateRandomSlangWordList() {
+         ArrayList<String> slangWords = new ArrayList<String>();
+         HashMap<String, String> slangWord ;
+         for (int i = 0 ; i < 4 ;i ++)
+         {
+             slangWord = SlangWord.randomSlangWord();
+             String word = slangWord.keySet().toString().substring(1,slangWord.keySet().toString().length()-1);
+             slangWords.add(word);
+         }
+
+         return slangWords;
+     }
+
+     /*
+      * Desc: Generate list of 4 definition corressponding to list of 4 slang words
+      * */
+
+     public static ArrayList<String> generateRandomDefinitionList(ArrayList<String> slangWords) {
+        ArrayList<String> definitions = new ArrayList<String>();
+        for (int i = 0 ; i < 4; i ++)
+        {
+            definitions.add(dictionary.get(slangWords.get(i)));
+        }
+        return definitions;
 
      }
 
      /*
-      * Desc: Show 1 meaning, user guess the slang word
-      * */
+     * Randome index of [0,1,2,3]
+     * */
 
-     public static void guessSlangWord() {
+    public static int randomIndex()
+    {
+        Random rand = new Random();
+        int upper_bound = 4;
+        int index = rand.nextInt(upper_bound);
 
-     }
+        return index;
+    }
  }
